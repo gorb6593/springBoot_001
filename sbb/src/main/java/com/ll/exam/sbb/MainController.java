@@ -4,6 +4,12 @@ package com.ll.exam.sbb;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 @Controller
 public class MainController {
 
@@ -53,4 +59,52 @@ public class MainController {
     public int showMinus(int a, int b) {
         return a - b;
     }
+
+    @GetMapping("/gugudan")
+    @ResponseBody
+    public String gugudan(Integer dan, Integer limit) {
+        if(dan == null){
+            dan = 9;
+        }
+        if(limit == null){
+            limit = 9;
+        }
+        Integer finalDan = dan;
+        return IntStream.rangeClosed(1, limit)
+                .mapToObj(i -> "%d * %d = %d".formatted(finalDan, i, finalDan * i))
+                .collect(Collectors.joining("<br>\n"));
+    }
+
+    @GetMapping("/plus2")
+    @ResponseBody
+    public void showPlus2(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int a = Integer.parseInt(req.getParameter("a"));
+        int b = Integer.parseInt(req.getParameter("b"));
+
+        resp.getWriter().append(a+b+"");
+    }
+
+    @GetMapping("/mbti/{name}")
+    @ResponseBody
+    public String mbti(@PathVariable String name) {
+//        String rs = switch (name){
+//            case "홍길동" -> "INFP";
+//            case "이해규" -> "ENFJ";
+//            default -> "모름";
+//        };
+//        return rs;
+        // 둘다 됌
+        return switch (name){
+            case "홍길동" -> "INFP";
+            case "이해규" -> "ENFJ";
+            case "이해규1,이해규2,이해규3" -> "ENFJ";
+            case "이해규4" -> {
+                char j = 'K';
+                yield "ENF"+j;
+            }
+            default -> "모름";
+        };
+
+    }
+
 }
