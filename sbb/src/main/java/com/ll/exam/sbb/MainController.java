@@ -3,6 +3,7 @@ package com.ll.exam.sbb;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -130,7 +132,13 @@ public class MainController {
 
         return "세션변수 %s의 값이 %s 입니다.".formatted(name, value);
     }
-    private List<Article> articles = new ArrayList<>();
+    private List<Article> articles = new ArrayList<>(
+            Arrays.asList
+            (
+                new Article("제목","내용"),
+                new Article("제목","내용")
+            )
+    );
 
     @GetMapping("/addArticle")
     @ResponseBody
@@ -153,14 +161,34 @@ public class MainController {
 
         return article;
     }
+
+    @GetMapping("/modifyArticle/{id}")
+    @ResponseBody
+    public String getArticle(@PathVariable int id, String title, String body) {
+        Article article = articles
+                .stream()
+                .filter(a -> a.getId() == id)
+                .findFirst()
+                .get();
+
+        if( article == null){
+            return "%d번 게시물은 존재하지 않습니다.".formatted(id);
+        }
+
+        article.setTitle(title);
+        article.setBody(title);
+
+        return "%d번 게시물을 수정했습니다..".formatted(id);
+    }
 }
 @AllArgsConstructor
 @Getter
+@Setter
 class Article {
     private static int lastId = 0;
-    private final int id;
-    private final String title;
-    private final String body;
+    private int id;
+    private String title;
+    private String body;
 
     public Article(String title, String body){
         this(++lastId,title,body);
