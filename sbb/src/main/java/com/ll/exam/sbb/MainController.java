@@ -157,7 +157,8 @@ public class MainController {
                 .stream()
                 .filter(a -> a.getId() == id)
                 .findFirst()
-                .get();
+                //.get();
+                .orElse(null);
 
         return article;
     }
@@ -169,7 +170,8 @@ public class MainController {
                 .stream()
                 .filter(a -> a.getId() == id)
                 .findFirst()
-                .get();
+                //.get();
+                .orElse(null);
 
         if( article == null){
             return "%d번 게시물은 존재하지 않습니다.".formatted(id);
@@ -179,6 +181,22 @@ public class MainController {
         article.setBody(title);
 
         return "%d번 게시물을 수정했습니다..".formatted(id);
+    }
+
+    @GetMapping("/deleteArticle/{id}")
+    @ResponseBody
+    public String deleteArticle(@PathVariable int id) {
+        Article article = articles
+                .stream()
+                .filter(a -> a.getId() == id)
+                .findFirst()
+                .orElse(null);
+        if( article == null){
+            return "%d번 게시물은 존재하지 않습니다.".formatted(id);
+        }
+
+        articles.remove(article);
+        return "%d번 게시물 삭제했습니다.".formatted(id);
     }
 }
 @AllArgsConstructor
@@ -193,4 +211,5 @@ class Article {
     public Article(String title, String body){
         this(++lastId,title,body);
     }
+
 }
