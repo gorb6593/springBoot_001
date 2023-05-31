@@ -198,6 +198,20 @@ public class MainController {
         articles.remove(article);
         return "%d번 게시물 삭제했습니다.".formatted(id);
     }
+
+    @GetMapping("addPersonOldVersion")
+    @ResponseBody
+    public Person addPersonOldVersion(int id, int age, String name){
+        Person p = new Person(id, age, name);
+        return p;
+    }
+
+    @GetMapping("addPerson")
+    @ResponseBody
+    public Person addPerson(Person p){
+        
+        return p;
+    }
 }
 @AllArgsConstructor
 @Getter
@@ -211,5 +225,13 @@ class Article {
     public Article(String title, String body){
         this(++lastId,title,body);
     }
+}
+@AllArgsConstructor
+@Getter
+@Setter
+class Person{
+    private int id;
+    private int age;
+    private String name;
 
 }
