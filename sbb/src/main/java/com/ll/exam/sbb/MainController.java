@@ -206,10 +206,10 @@ public class MainController {
         return p;
     }
 
-    @GetMapping("addPerson")
+    @GetMapping("addPerson/{id}")
     @ResponseBody
     public Person addPerson(Person p){
-        
+
         return p;
     }
 }
