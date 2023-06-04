@@ -1,11 +1,14 @@
-package com.ll.exam.sbb;
+package com.exam.sbb.question;
 
+import com.exam.sbb.answer.Answer;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +17,7 @@ import java.time.LocalDateTime;
 public class Question {
     @Id // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    private Long id;
+    private int id;
 
     @Column(length = 200) // varchar(200)
     private String subject;
@@ -25,4 +28,10 @@ public class Question {
     @CreatedDate
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
+
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Answer> answerList = new ArrayList<>();
+
+    private Integer hitCount = 0;
 }

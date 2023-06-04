@@ -1,11 +1,11 @@
-package com.ll.exam.sbb;
+package com.exam.sbb.answer;
 
+import com.exam.sbb.question.Question;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ import java.util.List;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -23,8 +23,4 @@ public class Answer {
 
     @ManyToOne
     private Question question;
-
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-    private List<Answer> answerList;
-
 }
