@@ -29,9 +29,13 @@ public class Question {
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
 
-
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Answer> answerList = new ArrayList<>();
 
-    private Integer hitCount = 0;
+    public void addAnswer(Answer answer){
+        answer.setQuestion(this);
+        getAnswerList().add(answer);
+    }
+
+
 }

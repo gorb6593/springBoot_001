@@ -5,9 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+@RequestMapping("/question")
 @Controller
 @RequiredArgsConstructor // 생성자 주입
 /*
@@ -23,7 +25,7 @@ public class QuestionController {
 
     //@autowired 필드 주입
     private final QuestionService questionService;
-    @GetMapping("/question/list")
+    @GetMapping("/list")
     //이 자리에 @responsebody가 없으면 resources/templates/question_list.html 파일을 뷰로 한다
     public String list(Model model) {
         List<Question> questionList = this.questionService.getList();
@@ -35,9 +37,9 @@ public class QuestionController {
     }
 
 
-    @GetMapping("/question/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable int id) {
-        List<Question> questionList = this.questionService.getList();
+        //List<Question> questionList = this.questionService.getList();
         Question question = questionService.getQuestion(id);
 
         model.addAttribute("question",question);
