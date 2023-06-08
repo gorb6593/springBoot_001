@@ -10,3 +10,4 @@
    Like	findBySubjectLike(String subject)	like 검색
    In	findBySubjectIn(String[] subjects)	여러 값중에 하나인 항목 검색
    OrderBy	findBySubjectOrderByCreateDateAsc(String subject)	검색 결과를 정렬하여 전달
+4. 
