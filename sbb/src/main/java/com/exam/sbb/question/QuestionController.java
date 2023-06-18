@@ -1,11 +1,14 @@
 package com.exam.sbb.question;
 
+import com.exam.sbb.answer.AnswerForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RequestMapping("/question")
 @Controller
@@ -25,19 +28,18 @@ public class QuestionController {
     private final QuestionService questionService;
     @GetMapping("/list")
     //이 자리에 @responsebody가 없으면 resources/templates/question_list.html 파일을 뷰로 한다
-    public String list(Model model) {
-        List<Question> questionList = this.questionService.getList();
+    public String list(Model model,  @RequestParam(defaultValue="0") int page) {
+        Page<Question> paging = this.questionService.getList(page);
 
         // 미리 실행된 question_list.html에서
         // questionList라는 이름으로 변수를 사용할 수 있다.
-        model.addAttribute("questionList", questionList);
+        model.addAttribute("paging", paging);
         return "question_list";
     }
 
 
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable int id) {
-        //List<Question> questionList = this.questionService.getList();
+    public String detail(Model model, @PathVariable int id, AnswerForm answerForm) {
         Question question = questionService.getQuestion(id);
 
         model.addAttribute("question",question);
@@ -46,14 +48,19 @@ public class QuestionController {
     }
 
     @GetMapping("/create")
-    public String questionCreate() {
+    public String questionCreate(QuestionForm questionForm) {
         return "question_form";
     }
 
     @PostMapping("/create")
-    public String questionCreate(@RequestParam String subject, @RequestParam String content) {
-        // TODO 질문을 저장한다.
-        questionService.create(subject, content);
+    public String questionCreate(Model model, @Valid QuestionForm questionForm, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()){
+            return "question_form";
+        }
+
+        questionService.create(questionForm.getSubject(), questionForm.getSubject());
+
         return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
     }
 
