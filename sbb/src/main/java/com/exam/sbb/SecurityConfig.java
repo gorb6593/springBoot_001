@@ -24,7 +24,11 @@ public class SecurityConfig {
             .headers()
             .addHeaderWriter(new XFrameOptionsHeaderWriter(
                     XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
-        ;
+            .and()
+            .formLogin()
+            .loginPage("/user/login")
+            .defaultSuccessUrl("/");
+
         return http.build();
     }
     //스프링에 객체를 등록
